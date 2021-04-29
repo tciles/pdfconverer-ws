@@ -1,0 +1,87 @@
+{
+	"info": {
+		"_postman_id": "92e0fa92-8cd0-4b09-a1ab-d5ed04398527",
+		"name": "pdfconverter",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Convert PDF",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "pdf",
+							"type": "file",
+							"src": "/C:/Users/admin/Downloads/Le-Monde-diplomatique-2020-10.pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://pdfconverter-docker.lan/convert",
+					"protocol": "https",
+					"host": [
+						"pdfconverter-docker",
+						"lan"
+					],
+					"path": [
+						"convert"
+					]
+				},
+				"description": "Body:<br>\r\n- pdf: file data"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Result",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "pdf",
+							"type": "file",
+							"src": "/C:/Users/admin/Downloads/Le-Monde-diplomatique-2020-10.pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://pdfconverter-docker.lan/result/6a34076f-70fe-46f2-a824-b5e729e296aa",
+					"protocol": "https",
+					"host": [
+						"pdfconverter-docker",
+						"lan"
+					],
+					"path": [
+						"result",
+						"6a34076f-70fe-46f2-a824-b5e729e296aa"
+					]
+				},
+				"description": "/result/&lt;job_id&gt;"
+			},
+			"response": []
+		}
+	]
+}
