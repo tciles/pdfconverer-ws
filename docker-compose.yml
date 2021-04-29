@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  redis:
+    image: redis:5.0.7-alpine
+    expose:
+      - "6379"
+    volumes:
+      - ./volumes/redis:/data
+
+  frontend:
+    build:
+      context: '.'
+      dockerfile: .docker/Dockerfile
+    entrypoint: sh -c 'gunicorn --bind 0.0.0.0:5000 -w 8 --access-logfile - --error-logfile - wsgi'
+    environment:
+      - OUTPUT_DIR=/output
+      - REDIS_HOST=redis
+      - NUM_WORKERS=2
+    expose:
+      - "5000"
+    depends_on:
+      - redis
+    volumes:
+      - ./output:/output
+      - ./application:/www
+
+  nginx:
+    image: nginx:1.17-alpine
+    depends_on:
+      - frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./.docker/nginx:/etc/nginx/conf.d
+    entrypoint: "/bin/sh -c \"nginx -g 'daemon off;' & while true; do nginx -t && nginx -s reload; sleep 1h; done\""
+
+  worker:
+    build:
+      context: '.'
+      dockerfile: .docker/Dockerfile
+    entrypoint: supervisord -n
+    environment:
+      - OUTPUT_DIR=/output
+      - REDIS_HOST=redis
+      - NUM_WORKERS=2
+    depends_on:
+      - redis
+    volumes:
+      - ./output:/output

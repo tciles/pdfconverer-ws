@@ -1,0 +1,4 @@
+.idea/
+volumes/
+output/**/*
+!output/**/*.gitkeep
