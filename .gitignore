@@ -2,3 +2,5 @@
 volumes/
 output/**/*
 !output/**/*.gitkeep
+
+__pycache__
